@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once 'config.php';
+    // Register
 if (isset($_POST['Register'])){
     $name = $_POST['name'];
     $Email = $_POST['email'];
@@ -8,25 +9,25 @@ if (isset($_POST['Register'])){
     $role = $_POST['role'];
     
 
-    $checkEmail = $conn->query("select Email From users Where Email = '$Email'");
+    $checkEmail = $conn->query("Select Email From users Where Email = '$Email'");
     if ($checkEmail->num_rows>0) {
         $_SESSION['register_error'] = 'Email is already registered!';
-        $_SESSION['active_forn'] = 'register';
+        $_SESSION['active_form'] = 'register';
     }else{
         $conn->query("Insert into users(Name,Email,Password,role) values ('$name','$Email','$password','$role')");
     }
     header("Location: index.php");
     exit();
 }
-
+// login
 if (isset($_POST['login'])){
     $email = $_POST['email'];
     $password = $_POST['password'];
 
 
-    $Result = $conn->query("select * from users where Email ='$email'");
-    if($Result->num_rows>0){
-        $user =$Result->fetch_assoc();
+    $result = $conn->query("select * from users where Email ='$email' and Password ='$password'");
+    if($result->num_rows>0){
+        $user =$result->fetch_assoc();
         if(password_verify($password, $user['password'])){
             $_SESSION['name'] = $user['name'];
             $_SESSION['email'] = $user['email'];
